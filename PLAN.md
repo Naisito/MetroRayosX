@@ -2,6 +2,35 @@
 
 17 de noviembre de 2026
 
+## Estado
+
+Actualizado el 17 de noviembre de 2026. Las nueve fases están escritas, pero solo una parte está probada: la app todavía no se ha compilado ni una vez, porque el repositorio de GitHub no está creado.
+
+| Parte | Escrita | Probada |
+| --- | --- | --- |
+| Datos (Fase 1, con la línea 3) | Sí | Sí: `validate.py` da 0 fallos y 4 avisos |
+| Núcleo `MetroCore` (lógica de las fases 2 a 7) | Sí | Sí: 143 tests en un contenedor Linux, con los datos reales |
+| App (pantallas, AR, mapa, medición) | Sí | No: sin compilar y sin probar en el iPhone |
+| Workflows de GitHub Actions | Sí | No: nunca se han ejecutado |
+
+Lo que falta, por orden:
+
+1. Crear el repositorio público y subir el código (necesita tu visto bueno).
+2. Corregir los errores que dé la primera compilación de la app en GitHub Actions.
+3. Instalar el `.ipa` con SideStore y hacer las pruebas de calle de cada fase.
+4. Apuntar aquí el resultado del botón «¿Hay geotracking?» (Más > Estado y registro). Decide si el Modo A sirve en Bilbao.
+5. Medir profundidades reales: las 33 estaciones subterráneas tienen la cota estimada.
+
+Cambios respecto al plan original:
+
+- Los feeds en vivo no dan la posición del tren dentro del túnel, solo la hora de llegada a cada parada. Los trenes se colocan interpolando entre paradas. La línea 3 no tiene trenes en vivo.
+- El GTFS-Realtime se decodifica con un lector propio, sin SwiftProtobuf: la app no tiene dependencias externas.
+- `metro.json` lleva además las rutas de cada línea (para colocar trenes) y la rejilla de relieve va en grados, con un paso de unos 10 m, para que pese 5 MB.
+- Moyua aparece como «Eliptikoa», que es el nombre de la estación en los datos de Metro Bilbao y en OpenStreetMap.
+- Los rótulos de la pantalla AR se dibujan en 2D sobre la imagen en lugar de como texto 3D.
+- El núcleo se prueba también en este PC con Docker (`tools\test-core.ps1`), sin esperar a GitHub.
+- No hay grabaciones reales todavía: el test de reproducción de sesiones usa una grabación sintética.
+
 ## Resumen
 
 La app dibuja el túnel del metro en 3D bajo tus pies y lo superpone a la cámara, de modo que al apuntar al suelo parece que lo atraviesas con la vista. El móvil no detecta nada bajo tierra: coloca un modelo del trazado real usando GPS, brújula y ARKit.
@@ -328,7 +357,7 @@ Nueve fases, cada una con una prueba que haces tú antes de seguir. Las fases 0 
 - [ ] Crear el repositorio público en GitHub, el `project.yml` de XcodeGen y el paquete local `MetroCore`.
 - [ ] Workflow `build.yml` en un ejecutor `macos-latest`: genera el proyecto con XcodeGen, compila con `xcodebuild archive` sin firmar (`CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO`), mete el `.app` en una carpeta `Payload/`, la comprime como `.ipa` y la publica como fichero de una Release, para poder descargarla desde Safari en el iPhone.
 - [ ] Workflow `test.yml`: `swift test` de `MetroCore` en cada push.
-- [ ] Crear `CLAUDE.md` con los comandos de `gh` para seguir las compilaciones.
+- [x] Crear `CLAUDE.md` con los comandos de `gh` para seguir las compilaciones.
 - [ ] Pantalla única que muestre latitud, longitud, precisión del GPS y rumbo.
 - [ ] Botón «¿Hay geotracking?» que llame a `ARGeoTrackingConfiguration.checkAvailability(at:)` para tu posición, Moyua y Zazpikaleak/Casco Viejo.
 - [ ] Registro en fichero con botón de compartir: sin Xcode es la única forma de ver qué pasa dentro de la app.
@@ -338,15 +367,15 @@ Hecho cuando: GitHub Actions produce el .ipa, SideStore lo instala, la app abre 
 
 ### Fase 1. Datos
 
-- [ ] Escribir los cinco scripts de «Pipeline de datos».
-- [ ] Rellenar `depths.csv` con todas las estaciones en `estimado`.
+- [x] Escribir los cinco scripts de «Pipeline de datos».
+- [x] Rellenar `depths.csv` con todas las estaciones en `estimado`.
 - [ ] Buscar en euskadi.eus los anejos de trazado disponibles y pasar a `depths.csv` las cotas que aparezcan, con `metodo = proyecto`.
 
 Hecho cuando: `validate.py` pasa y `preview.geojson` muestra en geojson.io las líneas enteras, sin huecos y sobre las calles correctas.
 
 ### Fase 2. Mapa 2D
 
-- [ ] `MetroCore`: `Model`, `NetworkLoader`, `Geo`, `SpatialIndex`, `Terrain`, con tests.
+- [x] `MetroCore`: `Model`, `NetworkLoader`, `Geo`, `SpatialIndex`, `Terrain`, con tests.
 - [ ] `MapScreen`: vías por color de línea, estaciones, bocas y tu posición.
 - [ ] Panel inferior: estación más cercana, distancia a la vía y metros bajo tus pies.
 
@@ -372,7 +401,7 @@ Hecho cuando: en una estación medida, la profundidad mostrada coincide con la m
 
 ### Fase 5. Alineación
 
-- [ ] `Alignment.swift` con tests de trayectorias sintéticas: con 8 m de ruido y 15° de giro, recupera el giro con 3° de margen y el desplazamiento con 3 m.
+- [x] `Alignment.swift` con tests de trayectorias sintéticas: con 8 m de ruido y 15° de giro, recupera el giro con 3° de margen y el desplazamiento con 3 m.
 - [ ] `SessionRecorder` y tests que reproduzcan grabaciones reales.
 - [ ] `CalibrationOverlay`: un dedo mueve, dos dedos giran, botón «Estoy en esta boca» con las tres más cercanas, botón de reinicio.
 - [ ] Modo A si la Fase 0 dio cobertura: `ARGeoTrackingConfiguration` con un `ARGeoAnchor` como origen de la escena, y caída al Modo B si falla.

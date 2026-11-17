@@ -12,6 +12,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "MetroCore"),
-        .testTarget(name: "MetroCoreTests", dependencies: ["MetroCore"])
+        // Los tests leen `Fixtures/` y `App/Resources/` por ruta, con #filePath.
+        .testTarget(name: "MetroCoreTests", dependencies: ["MetroCore"], exclude: ["Fixtures"])
     ]
 )

@@ -1,0 +1,9 @@
+requests
+numpy
+pyproj
+rasterio
+gtfs-realtime-bindings
+# Usa el almacén de certificados del sistema (necesario si un antivirus intercepta TLS).
+truststore
+# Solo para make_icon.py
+pillow

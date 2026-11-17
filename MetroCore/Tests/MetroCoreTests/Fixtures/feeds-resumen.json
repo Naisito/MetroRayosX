@@ -1,0 +1,611 @@
+{
+  "nota": "Muestras reales de los feeds GTFS-RT del CTB para Metro Bilbao, descargadas el 2026-11-17. null = campo ausente en el protobuf.",
+  "vehicle_positions": {
+    "fichero": "vehicle-positions.pb",
+    "bytes": 792,
+    "entidades": 10,
+    "cabecera": {
+      "gtfs_realtime_version": "2.0",
+      "incrementality": "FULL_DATASET",
+      "timestamp": 1794918765
+    },
+    "primeras": [
+      {
+        "id": "PEN_PEN1_KAB_1794918733",
+        "trip_id": "892022",
+        "route_id": "MB",
+        "direction_id": 1,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "position": {
+          "latitude": 43.32198,
+          "longitude": -3.0254,
+          "bearing": null
+        },
+        "stop_id": "40.0",
+        "current_stop_sequence": null,
+        "current_status": null,
+        "timestamp": 1794918733,
+        "vehicle_id": "551"
+      },
+      {
+        "id": "BOL_BOL1_IBB_1794918732",
+        "trip_id": "892108",
+        "route_id": "MB",
+        "direction_id": 1,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "position": {
+          "latitude": 43.247002,
+          "longitude": -2.90573,
+          "bearing": null
+        },
+        "stop_id": "3.0",
+        "current_stop_sequence": null,
+        "current_status": null,
+        "timestamp": 1794918732,
+        "vehicle_id": "558"
+      },
+      {
+        "id": "ABA_ABA2_BSR_1794918758",
+        "trip_id": "892043",
+        "route_id": "MB",
+        "direction_id": 2,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "position": {
+          "latitude": 43.261398,
+          "longitude": -2.92761,
+          "bearing": null
+        },
+        "stop_id": "7.0",
+        "current_stop_sequence": null,
+        "current_status": null,
+        "timestamp": 1794918758,
+        "vehicle_id": "606"
+      }
+    ],
+    "todos_los_ids": [
+      "PEN_PEN1_KAB_1794918733",
+      "BOL_BOL1_IBB_1794918732",
+      "ABA_ABA2_BSR_1794918758",
+      "MOY_MOY1_PLE_1794918714",
+      "SAM_SAM2_ETX_1794918713",
+      "SAR_SAR2_BSR_1794918704",
+      "LEI_LEI2_ETX_1794918726",
+      "NEG_NEG2_ETX_1794918717",
+      "BID_BID1_IBB_1794918726",
+      "SES_SES2_BSR_1794918719"
+    ],
+    "todos_los_stop_id": [
+      "40.0",
+      "3.0",
+      "7.0",
+      "8.0",
+      "10.0",
+      "12.0",
+      "17.0",
+      "21.0",
+      "24.0",
+      "37.0"
+    ]
+  },
+  "trip_updates": {
+    "fichero": "trip-updates.pb",
+    "bytes": 15021,
+    "entidades": 70,
+    "cabecera": {
+      "gtfs_realtime_version": "2.0",
+      "incrementality": "FULL_DATASET",
+      "timestamp": 1794918765
+    },
+    "primeras": [
+      {
+        "id": "trip_update_891915",
+        "trip_id": "891915",
+        "route_id": "MB",
+        "direction_id": 2,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "timestamp": 1794918795,
+        "vehicle_id": "507",
+        "stop_time_update": [
+          {
+            "stop_sequence": null,
+            "stop_id": "25.0",
+            "arrival": {
+              "time": 1794918711,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "24.0",
+            "arrival": {
+              "time": 1794918863,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "23.0",
+            "arrival": {
+              "time": 1794918952,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "22.0",
+            "arrival": {
+              "time": 1794919054,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "21.0",
+            "arrival": {
+              "time": 1794919170,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "20.0",
+            "arrival": {
+              "time": 1794919321,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "19.0",
+            "arrival": {
+              "time": 1794919414,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "18.0",
+            "arrival": {
+              "time": 1794919506,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "17.0",
+            "arrival": {
+              "time": 1794919593,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "16.0",
+            "arrival": {
+              "time": 1794919669,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "15.0",
+            "arrival": {
+              "time": 1794919815,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "14.0",
+            "arrival": {
+              "time": 1794919955,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "13.0",
+            "arrival": {
+              "time": 1794920076,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "12.0",
+            "arrival": {
+              "time": 1794920177,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "11.0",
+            "arrival": {
+              "time": 1794920280,
+              "delay": null
+            },
+            "departure": null
+          }
+        ]
+      },
+      {
+        "id": "trip_update_891926",
+        "trip_id": "891926",
+        "route_id": "MB",
+        "direction_id": 1,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "timestamp": 1794918793,
+        "vehicle_id": "502",
+        "stop_time_update": [
+          {
+            "stop_sequence": null,
+            "stop_id": "51.0",
+            "arrival": {
+              "time": 1794919137,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "1.0",
+            "arrival": {
+              "time": 1794919241,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "2.0",
+            "arrival": {
+              "time": 1794919387,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "3.0",
+            "arrival": {
+              "time": 1794919479,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "4.0",
+            "arrival": {
+              "time": 1794919556,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "5.0",
+            "arrival": {
+              "time": 1794919629,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "6.0",
+            "arrival": {
+              "time": 1794919728,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "7.0",
+            "arrival": {
+              "time": 1794919809,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "8.0",
+            "arrival": {
+              "time": 1794919884,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "9.0",
+            "arrival": {
+              "time": 1794919977,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "10.0",
+            "arrival": {
+              "time": 1794920052,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "11.0",
+            "arrival": {
+              "time": 1794920163,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "12.0",
+            "arrival": {
+              "time": 1794920268,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "13.0",
+            "arrival": {
+              "time": 1794920361,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "32.0",
+            "arrival": {
+              "time": 1794920573,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "33.0",
+            "arrival": {
+              "time": 1794920680,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "34.0",
+            "arrival": {
+              "time": 1794920772,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "35.0",
+            "arrival": {
+              "time": 1794920846,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "36.0",
+            "arrival": {
+              "time": 1794920953,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "37.0",
+            "arrival": {
+              "time": 1794921050,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "38.0",
+            "arrival": {
+              "time": 1794921143,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "39.0",
+            "arrival": {
+              "time": 1794921225,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "40.0",
+            "arrival": {
+              "time": 1794921307,
+              "delay": null
+            },
+            "departure": null
+          },
+          {
+            "stop_sequence": null,
+            "stop_id": "41.0",
+            "arrival": {
+              "time": 1794921414,
+              "delay": null
+            },
+            "departure": null
+          }
+        ]
+      },
+      {
+        "id": "trip_update_891943",
+        "trip_id": "891943",
+        "route_id": "MB",
+        "direction_id": 2,
+        "start_time": null,
+        "start_date": null,
+        "schedule_relationship": "SCHEDULED",
+        "timestamp": 1794918757,
+        "vehicle_id": "555",
+        "stop_time_update": [
+          {
+            "stop_sequence": null,
+            "stop_id": "25.0",
+            "arrival": {
+              "time": 1794925057,
+              "delay": null
+            },
+            "departure": null
+          }
+        ]
+      }
+    ],
+    "total_stop_time_updates": 658,
+    "stop_time_updates_por_entidad": [
+      15,
+      24,
+      1,
+      17,
+      1,
+      9,
+      12,
+      15,
+      2,
+      4,
+      18,
+      2,
+      2,
+      14,
+      7,
+      14,
+      13,
+      1,
+      1,
+      1,
+      16,
+      8,
+      3,
+      25,
+      5,
+      4,
+      22,
+      1,
+      1,
+      21,
+      6,
+      12,
+      2,
+      15,
+      22,
+      5,
+      11,
+      7,
+      2,
+      1,
+      1,
+      1,
+      16,
+      13,
+      9,
+      1,
+      1,
+      14,
+      19,
+      2,
+      14,
+      2,
+      7,
+      12,
+      14,
+      12,
+      27,
+      5,
+      17,
+      5,
+      3,
+      20,
+      12,
+      3,
+      18,
+      10,
+      10,
+      12,
+      14,
+      2
+    ],
+    "ultima": {
+      "id": "trip_update_892493",
+      "trip_id": "892493",
+      "route_id": "MB",
+      "direction_id": 1,
+      "start_time": null,
+      "start_date": null,
+      "schedule_relationship": "SCHEDULED",
+      "timestamp": 1794918776,
+      "vehicle_id": "517",
+      "stop_time_update": [
+        {
+          "stop_sequence": null,
+          "stop_id": "51.0",
+          "arrival": {
+            "time": 1794920636,
+            "delay": null
+          },
+          "departure": null
+        },
+        {
+          "stop_sequence": null,
+          "stop_id": "1.0",
+          "arrival": {
+            "time": 1794920740,
+            "delay": null
+          },
+          "departure": null
+        }
+      ]
+    }
+  }
+}

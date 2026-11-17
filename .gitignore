@@ -23,3 +23,6 @@ __pycache__/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Salida de tools/validate.py
+tools/preview.geojson

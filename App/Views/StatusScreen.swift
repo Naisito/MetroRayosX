@@ -3,7 +3,8 @@ import MetroCore
 import SwiftUI
 import UIKit
 
-/// Pantalla única de la Fase 0: posición, rumbo, cobertura de geotracking y registro.
+/// Estado del iPhone: posición, rumbo, cobertura de geotracking y registro.
+/// Era la pantalla única de la Fase 0; ahora cuelga de la pestaña «Más».
 struct StatusScreen: View {
     @EnvironmentObject private var location: LocationService
     @ObservedObject private var appLog = AppLog.shared
@@ -11,18 +12,16 @@ struct StatusScreen: View {
     @State private var showingShare = false
 
     var body: some View {
-        NavigationView {
-            List {
-                positionSection
-                headingSection
-                geoTrackingSection
-                logSection
-                appSection
-            }
-            .listStyle(.insetGrouped)
-            .navigationTitle("Metro Rayos X")
+        List {
+            positionSection
+            headingSection
+            geoTrackingSection
+            logSection
+            appSection
         }
-        .navigationViewStyle(.stack)
+        .listStyle(.insetGrouped)
+        .navigationTitle("Estado y registro")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             location.start()
         }
