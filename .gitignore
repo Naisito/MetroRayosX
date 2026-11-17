@@ -1,0 +1,25 @@
+# Proyecto de Xcode: lo genera XcodeGen a partir de project.yml
+*.xcodeproj/
+*.xcworkspace/
+App/Info.plist
+DerivedData/
+
+# Compilación
+build/
+Payload/
+*.ipa
+*.xcarchive/
+.build/
+.swiftpm/
+
+# Datos descargados por tools/
+tools/raw/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Sistema
+.DS_Store
+Thumbs.db

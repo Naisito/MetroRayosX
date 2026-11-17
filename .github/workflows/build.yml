@@ -1,0 +1,89 @@
+name: Build IPA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "App/**"
+      - "MetroCore/**"
+      - "project.yml"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versiones
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Tests de MetroCore
+        run: swift test --package-path MetroCore
+
+      - name: Instalar XcodeGen
+        run: brew install xcodegen
+
+      - name: Generar el proyecto
+        run: xcodegen generate
+
+      - name: Compilar sin firmar
+        run: |
+          xcodebuild archive \
+            -quiet \
+            -project MetroRayosX.xcodeproj \
+            -scheme MetroRayosX \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/MetroRayosX.xcarchive \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
+            GIT_COMMIT="${GITHUB_SHA::7}" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Empaquetar el .ipa
+        run: |
+          APP="build/MetroRayosX.xcarchive/Products/Applications/MetroRayosX.app"
+          test -d "$APP"
+          rm -rf Payload
+          mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry MetroRayosX.ipa Payload
+          ls -lh MetroRayosX.ipa
+
+      - name: Guardar el .ipa como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: MetroRayosX-ipa
+          path: MetroRayosX.ipa
+
+      - name: Publicar la Release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="build-${{ github.run_number }}"
+          {
+            echo "Build ${{ github.run_number }}, commit ${GITHUB_SHA::7}."
+            echo
+            git log -1 --pretty=%B
+            echo
+            echo "Instalación: descarga MetroRayosX.ipa desde Safari en el iPhone y ábrelo con SideStore (My Apps > +)."
+          } > notas.md
+          gh release create "$TAG" MetroRayosX.ipa \
+            --target "$GITHUB_SHA" \
+            --title "Build ${{ github.run_number }}" \
+            --notes-file notas.md \
+            --latest

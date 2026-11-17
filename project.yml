@@ -1,0 +1,63 @@
+name: MetroRayosX
+
+options:
+  bundleIdPrefix: app.metrorayosx
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+  developmentLanguage: es
+
+packages:
+  MetroCore:
+    path: MetroCore
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    # GitHub Actions sustituye estos dos valores al compilar.
+    CURRENT_PROJECT_VERSION: "1"
+    GIT_COMMIT: local
+
+targets:
+  MetroRayosX:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    dependencies:
+      - package: MetroCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.metrorayosx.ios
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Metro Rayos X
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        GitCommit: $(GIT_COMMIT)
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UIRequiredDeviceCapabilities:
+          - arkit
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # El registro de la app queda visible en Archivos > En mi iPhone.
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        NSCameraUsageDescription: La cámara se usa para dibujar el túnel del metro sobre lo que ves.
+        NSLocationWhenInUseUsageDescription: Tu posición se usa para colocar el túnel del metro bajo tus pies.
+        NSMotionUsageDescription: El barómetro se usa para medir la profundidad de las estaciones.
+
+schemes:
+  MetroRayosX:
+    build:
+      targets:
+        MetroRayosX: all
+    archive:
+      config: Release
