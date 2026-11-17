@@ -260,6 +260,8 @@ final class ARSessionController: NSObject, ObservableObject {
             @unknown default:
                 return ("limitado", true)
             }
+        @unknown default:
+            return ("desconocido", true)
         }
     }
 }

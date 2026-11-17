@@ -4,19 +4,19 @@
 
 ## Estado
 
-Actualizado el 17 de noviembre de 2026. Las nueve fases están escritas, pero solo una parte está probada: la app todavía no se ha compilado ni una vez, porque el repositorio de GitHub no está creado.
+Actualizado el 17 de noviembre de 2026. Las nueve fases están escritas y el código está en GitHub, pero solo una parte está probada: GitHub Actions todavía no ha ejecutado ninguna compilación, así que la app no se ha compilado con Xcode ni se ha probado en el iPhone.
 
 | Parte | Escrita | Probada |
 | --- | --- | --- |
 | Datos (Fase 1, con la línea 3) | Sí | Sí: `validate.py` da 0 fallos y 4 avisos |
 | Núcleo `MetroCore` (lógica de las fases 2 a 7) | Sí | Sí: 143 tests en un contenedor Linux, con los datos reales |
-| App (pantallas, AR, mapa, medición) | Sí | No: sin compilar y sin probar en el iPhone |
+| App (pantallas, AR, mapa, medición) | Sí | A medias: compila en Linux contra réplicas de los frameworks de Apple (`tools\check-app.ps1`); sin compilar con Xcode y sin probar en el iPhone |
 | Workflows de GitHub Actions | Sí | No: nunca se han ejecutado |
 
 Lo que falta, por orden:
 
-1. Crear el repositorio público y subir el código (necesita tu visto bueno).
-2. Corregir los errores que dé la primera compilación de la app en GitHub Actions.
+1. Conseguir que GitHub Actions ejecute los workflows (el primer intento no llegó a arrancar).
+2. Corregir los errores que dé la primera compilación de la app con Xcode.
 3. Instalar el `.ipa` con SideStore y hacer las pruebas de calle de cada fase.
 4. Apuntar aquí el resultado del botón «¿Hay geotracking?» (Más > Estado y registro). Decide si el Modo A sirve en Bilbao.
 5. Medir profundidades reales: las 33 estaciones subterráneas tienen la cota estimada.
@@ -28,7 +28,7 @@ Cambios respecto al plan original:
 - `metro.json` lleva además las rutas de cada línea (para colocar trenes) y la rejilla de relieve va en grados, con un paso de unos 10 m, para que pese 5 MB.
 - Moyua aparece como «Eliptikoa», que es el nombre de la estación en los datos de Metro Bilbao y en OpenStreetMap.
 - Los rótulos de la pantalla AR se dibujan en 2D sobre la imagen en lugar de como texto 3D.
-- El núcleo se prueba también en este PC con Docker (`tools\test-core.ps1`), sin esperar a GitHub.
+- El núcleo se prueba también en este PC con Docker (`tools\test-core.ps1`), sin esperar a GitHub, y la app se comprueba a medias con `tools\check-app.ps1`.
 - No hay grabaciones reales todavía: el test de reproducción de sesiones usa una grabación sintética.
 
 ## Resumen

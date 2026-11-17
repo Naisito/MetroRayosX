@@ -10,16 +10,16 @@
 # Cada test corre en su propio proceso porque el XCTest de Linux se queda a
 # veces colgado al cerrar un test cuando se ejecutan todos seguidos.
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 $repo = Split-Path -Parent $PSScriptRoot
 $name = "swiftbox"
 
-docker info --format "{{.ServerVersion}}" *> $null
-if ($LASTEXITCODE -ne 0) { Write-Error "Docker no está arrancado. Abre Docker Desktop y vuelve a intentarlo." }
+$daemon = docker info --format "{{.ServerVersion}}" 2>$null
+if (-not $daemon) { Write-Host "Docker no está arrancado. Abre Docker Desktop y vuelve a intentarlo."; exit 2 }
 
 $running = docker ps -q --filter "name=^$name$"
 if (-not $running) {
-    docker rm -f $name *> $null
+    if (docker ps -aq --filter "name=^$name$") { docker rm -f $name | Out-Null }
     docker run -d --name $name -w /pkg swift:6.0 sleep infinity | Out-Null
 }
 

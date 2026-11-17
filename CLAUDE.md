@@ -4,7 +4,7 @@ App de iOS que dibuja el túnel del metro de Bilbao en AR bajo tus pies. El plan
 
 ## Compilación y tests
 
-No hay Mac ni Swift en este PC (Windows). Hay dos niveles de comprobación:
+No hay Mac ni Swift en este PC (Windows). Hay tres niveles de comprobación:
 
 1. **Núcleo (`MetroCore`), en local con Docker.** Con Docker Desktop arrancado:
 
@@ -14,7 +14,15 @@ No hay Mac ni Swift en este PC (Windows). Hay dos niveles de comprobación:
 
    Copia el paquete y los datos a un contenedor `swift:6.0`, compila y pasa cada test en su propio proceso. Termina con una línea `tests: N  ok: N  fallidos: 0`. No montes carpetas de Windows en el contenedor (`docker run -v`): Docker pide permiso en una ventana y el comando se queda colgado. No ejecutes `swift test` a secas dentro del contenedor: el XCTest de Linux se cuelga a veces al cerrar un test.
 
-2. **App (SwiftUI, ARKit, RealityKit), solo en GitHub Actions.** No hay forma de compilarla aquí.
+2. **App, comprobación parcial en local con Docker.**
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File tools\check-app.ps1
+   ```
+
+   Compila todos los fuentes de `App/` contra módulos de pega con los nombres de los frameworks de Apple (`tools/appcheck/Stubs`) y el `MetroCore` real. Caza errores de lenguaje, de llamadas a `MetroCore`, de acceso, de tipos y de aislamiento de actores. No garantiza que compile en Xcode: las firmas de Apple de los módulos de pega están escritas a mano. Si usas una API de Apple que no está en `Stubs`, añádela con su firma real (compruébala en developer.apple.com).
+
+3. **App de verdad (SwiftUI, ARKit, RealityKit), solo en GitHub Actions.**
    - `test.yml`: `swift test --package-path MetroCore` en cada push.
    - `build.yml`: en cada push a `main` que toque `App/`, `MetroCore/`, `project.yml` o el propio workflow. Pasa los tests, genera el proyecto con `xcodegen generate`, compila sin firmar con `xcodebuild archive` y publica `MetroRayosX.ipa` en una Release `build-N`.
 
@@ -27,7 +35,14 @@ No hay Mac ni Swift en este PC (Windows). Hay dos niveles de comprobación:
 
    Corrige los errores de compilación antes de avisar al usuario. Agrupa los cambios: cada compilación tarda minutos y cada instalación en el iPhone es manual (SideStore).
 
-Crear el repositorio en GitHub y hacer `git push` necesita el visto bueno expreso del usuario: es publicar fuera del PC.
+El repositorio es `Naisito/MetroRayosX` (público). Subir correcciones para que la app compile está autorizado; cualquier otra publicación, pregúntala.
+
+Si un job falla sin pasos ni registro, no es un error del código sino de la cuenta o de los ejecutores, y lo tiene que resolver el usuario. Mira las anotaciones del job antes de tocar nada:
+
+```bash
+gh api repos/Naisito/MetroRayosX/actions/runs/<id>/jobs --jq ".jobs[0].id"
+gh api repos/Naisito/MetroRayosX/check-runs/<job>/annotations --jq ".[].message"
+```
 
 ## Datos
 

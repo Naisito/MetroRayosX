@@ -13,7 +13,7 @@ Proyecto personal, sin relación con Metro Bilbao, el Consorcio de Transportes d
 
 ## Estado
 
-El código de todas las fases está escrito. Los datos y la lógica (`MetroCore`) están probados con tests; la app aún no se ha compilado ni probado en un iPhone. Las profundidades de las estaciones subterráneas son estimaciones hasta que se midan.
+El código de todas las fases está escrito. Los datos y la lógica (`MetroCore`) están probados con tests; la app aún no se ha compilado con Xcode ni probado en un iPhone. Las profundidades de las estaciones subterráneas son estimaciones hasta que se midan.
 
 ## Instalación
 
