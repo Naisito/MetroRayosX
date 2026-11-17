@@ -2,3 +2,4 @@
 *.bin binary
 *.ipa binary
 *.png binary
+*.pb binary
