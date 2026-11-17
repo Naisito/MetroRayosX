@@ -13,11 +13,11 @@ Proyecto personal, sin relación con Metro Bilbao, el Consorcio de Transportes d
 
 ## Estado
 
-El código de todas las fases está escrito. Los datos y la lógica (`MetroCore`) están probados con tests; la app aún no se ha compilado con Xcode ni probado en un iPhone. Las profundidades de las estaciones subterráneas son estimaciones hasta que se midan.
+El código de todas las fases está escrito y la app compila. Los datos y la lógica (`MetroCore`) están probados con tests; la app aún no se ha probado en un iPhone. Las profundidades de las estaciones subterráneas son estimaciones hasta que se midan.
 
 ## Instalación
 
-La app se compila en GitHub Actions y se instala sin Mac con SideStore. Los pasos están en el apartado «Pruebas e instalación» de [PLAN.md](PLAN.md). El `.ipa` más reciente estará en [Releases](../../releases/latest).
+La app se compila en GitHub Actions y se instala sin Mac con SideStore. Los pasos están en el apartado «Pruebas e instalación» de [PLAN.md](PLAN.md). El `.ipa` más reciente está en [Releases](../../releases/latest).
 
 ## Datos
 

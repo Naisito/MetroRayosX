@@ -4,22 +4,21 @@
 
 ## Estado
 
-Actualizado el 17 de noviembre de 2026. Las nueve fases están escritas y el código está en GitHub, pero solo una parte está probada: GitHub Actions todavía no ha ejecutado ninguna compilación, así que la app no se ha compilado con Xcode ni se ha probado en el iPhone.
+Actualizado el 17 de noviembre de 2026. Las nueve fases están escritas y la app compila: GitHub Actions ha publicado el primer `.ipa` (Release `build-1`, Xcode 26.6). Falta lo que solo se puede hacer con el iPhone en la mano: instalarla y probarla en la calle. Nada de la parte de AR se ha visto funcionar todavía.
 
 | Parte | Escrita | Probada |
 | --- | --- | --- |
 | Datos (Fase 1, con la línea 3) | Sí | Sí: `validate.py` da 0 fallos y 4 avisos |
 | Núcleo `MetroCore` (lógica de las fases 2 a 7) | Sí | Sí: 143 tests en un contenedor Linux, con los datos reales |
-| App (pantallas, AR, mapa, medición) | Sí | A medias: compila en Linux contra réplicas de los frameworks de Apple (`tools\check-app.ps1`); sin compilar con Xcode y sin probar en el iPhone |
-| Workflows de GitHub Actions | Sí | No: nunca se han ejecutado |
+| App (pantallas, AR, mapa, medición) | Sí | Compila con Xcode sin errores; sin probar en el iPhone |
+| Workflows de GitHub Actions | Sí | Sí: tests y `.ipa` sin firmar publicados en Releases |
 
 Lo que falta, por orden:
 
-1. Conseguir que GitHub Actions ejecute los workflows (el primer intento no llegó a arrancar).
-2. Corregir los errores que dé la primera compilación de la app con Xcode.
-3. Instalar el `.ipa` con SideStore y hacer las pruebas de calle de cada fase.
-4. Apuntar aquí el resultado del botón «¿Hay geotracking?» (Más > Estado y registro). Decide si el Modo A sirve en Bilbao.
-5. Medir profundidades reales: las 33 estaciones subterráneas tienen la cota estimada.
+1. Instalar el `.ipa` con SideStore (apartado «Pruebas e instalación»).
+2. Hacer las pruebas de calle de cada fase, en el orden de «Dónde probar», y enviar el registro de lo que falle.
+3. Apuntar aquí el resultado del botón «¿Hay geotracking?» (Más > Estado y registro). Decide si el Modo A sirve en Bilbao.
+4. Medir profundidades reales: las 33 estaciones subterráneas tienen la cota estimada.
 
 Cambios respecto al plan original:
 
@@ -354,9 +353,9 @@ Nueve fases, cada una con una prueba que haces tú antes de seguir. Las fases 0 
 
 ### Fase 0. Arranque
 
-- [ ] Crear el repositorio público en GitHub, el `project.yml` de XcodeGen y el paquete local `MetroCore`.
-- [ ] Workflow `build.yml` en un ejecutor `macos-latest`: genera el proyecto con XcodeGen, compila con `xcodebuild archive` sin firmar (`CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO`), mete el `.app` en una carpeta `Payload/`, la comprime como `.ipa` y la publica como fichero de una Release, para poder descargarla desde Safari en el iPhone.
-- [ ] Workflow `test.yml`: `swift test` de `MetroCore` en cada push.
+- [x] Crear el repositorio público en GitHub, el `project.yml` de XcodeGen y el paquete local `MetroCore`.
+- [x] Workflow `build.yml` en un ejecutor `macos-latest`: genera el proyecto con XcodeGen, compila con `xcodebuild archive` sin firmar (`CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO`), mete el `.app` en una carpeta `Payload/`, la comprime como `.ipa` y la publica como fichero de una Release, para poder descargarla desde Safari en el iPhone.
+- [x] Workflow `test.yml`: `swift test` de `MetroCore` en cada push.
 - [x] Crear `CLAUDE.md` con los comandos de `gh` para seguir las compilaciones.
 - [ ] Pantalla única que muestre latitud, longitud, precisión del GPS y rumbo.
 - [ ] Botón «¿Hay geotracking?» que llame a `ARGeoTrackingConfiguration.checkAvailability(at:)` para tu posición, Moyua y Zazpikaleak/Casco Viejo.
