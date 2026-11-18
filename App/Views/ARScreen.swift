@@ -125,6 +125,9 @@ struct ARScreen: View {
         } else {
             parts.append("sin vías a menos de 500 m")
         }
+        if abs(summary.altura) >= 1 {
+            parts.append(String(format: "a %.0f m sobre el terreno", summary.altura))
+        }
         if let anchored = experience.anchoredAt {
             parts.append("anclado en \(anchored)")
         }

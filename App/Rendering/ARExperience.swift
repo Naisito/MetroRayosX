@@ -26,6 +26,10 @@ struct HUDState: Equatable {
     var anchored = false
     var manual = false
     var cameraHeight = 0.0
+    var lift = 0.0
+    var liftManual = false
+    var altitude: Double?
+    var altitudeAccuracy: Double?
     var latitude: Double?
     var longitude: Double?
 }
@@ -37,6 +41,9 @@ struct ARSummary: Equatable {
     var distanciaVia: Double?
     var profundidad: Double?
     var profundidadEstimada = false
+    /// Metros a los que estás sobre el terreno (un puente, una pasarela).
+    var altura = 0.0
+    var alturaManual = false
 }
 
 /// Une la sesión de ARKit, el ajuste GPS-AR y la escena.
@@ -86,6 +93,13 @@ final class ARExperience: NSObject, ObservableObject {
     private var bootstrapAccuracy = Double.greatestFiniteMagnitude
     private var applied: RigidTransform2D?
     private var appliedHeight: Float?
+
+    // Altura sobre el terreno: en un puente o una pasarela, el suelo que ve
+    // ARKit no es el del relieve. La da la altitud del GPS o se fija a mano.
+    private var heightEstimator = HeightEstimator()
+    private var manualLift: Double?
+    private var appliedLift = 0.0
+    private var loggedLift = 0.0
 
     // Estado por imagen
     private var cameraTransform: simd_float4x4?
@@ -230,6 +244,8 @@ final class ARExperience: NSObject, ObservableObject {
             }
         }
 
+        addAltitude(fix, at: geo)
+
         if recorder.isRecording {
             recorder.add { sample in
                 sample.lat = geo.latitude
@@ -238,6 +254,59 @@ final class ARExperience: NSObject, ObservableObject {
                 self.fillPose(&sample)
             }
         }
+    }
+
+    /// Compara la altitud del GPS con el relieve para saber si pisas el
+    /// terreno o algo que está por encima.
+    private func addAltitude(_ fix: CLLocation, at geo: GeoPoint) {
+        guard let model = model, let camera = cameraTransform, !controller.trackingLimited else {
+            return
+        }
+        // El relieve bajo la posición ya ajustada, que es el que usa la escena.
+        guard let ground = userGround ?? model.groundElevation(at: geo) else {
+            return
+        }
+        let floor = controller.groundHeight(camera: camera, dt: 0)
+        let phone = min(max(Double(camera.columns.3.y - floor), 0.3), 2.2)
+        let before = heightEstimator.lift
+        let lift = heightEstimator.add(
+            altitude: fix.altitude,
+            accuracy: fix.verticalAccuracy,
+            ground: ground,
+            phoneHeight: phone
+        )
+        if (before == 0) != (lift == 0) || abs(lift - loggedLift) >= 2 {
+            loggedLift = lift
+            AppLog.shared.write(
+                String(format: "Altura sobre el terreno según el GPS: %.1f m (altitud %.1f ±%.1f, relieve %.1f, móvil a %.1f)",
+                       lift, fix.altitude, fix.verticalAccuracy, ground, phone),
+                category: "ar"
+            )
+        }
+    }
+
+    /// Botones de altura del panel de calibración: sube o baja a mano los
+    /// metros a los que estás sobre el terreno.
+    func adjustLift(by delta: Double) {
+        let current = manualLift ?? heightEstimator.lift
+        let next = min(max((current + delta).rounded(), -10), 80)
+        manualLift = next
+        lastSlowUpdate = 0
+        AppLog.shared.write(String(format: "Altura sobre el terreno a mano: %.0f m", next), category: "ar")
+    }
+
+    /// Vuelve a la altura que dé el GPS.
+    func resetLift() {
+        guard manualLift != nil else {
+            return
+        }
+        manualLift = nil
+        lastSlowUpdate = 0
+        AppLog.shared.write("Altura sobre el terreno: automática", category: "ar")
+    }
+
+    private var targetLift: Double {
+        manualLift ?? heightEstimator.lift
     }
 
     private func setOrigin(_ origin: GeoPoint) {
@@ -312,6 +381,10 @@ final class ARExperience: NSObject, ObservableObject {
         bootstrapAccuracy = .greatestFiniteMagnitude
         applied = nil
         appliedHeight = nil
+        heightEstimator.reset()
+        manualLift = nil
+        appliedLift = 0
+        loggedLift = 0
         anchoredAt = nil
         loggedFirstPlacement = false
         lastRefreshCenter = nil
@@ -496,9 +569,17 @@ final class ARExperience: NSObject, ObservableObject {
         }
 
         // 4. Altura: el suelo detectado por ARKit bajo el usuario corresponde
-        // a la cota del suelo en ese punto.
+        // a la cota del suelo en ese punto, más lo que estés por encima del
+        // terreno si pisas un puente o una pasarela.
         let groundW = controller.groundHeight(camera: camera, dt: Float(dt))
-        let groundCota = userGround ?? frame.cotaRef
+        let lift = targetLift
+        if appliedHeight == nil {
+            appliedLift = lift
+        } else {
+            // La del GPS entra despacio; la puesta a mano, enseguida.
+            appliedLift += (lift - appliedLift) * min(dt * (manualLift == nil ? 1.5 : 8), 1)
+        }
+        let groundCota = (userGround ?? frame.cotaRef) + appliedLift
         let targetHeight = groundW - frame.height(ofCota: groundCota)
         let height: Float
         if let current = appliedHeight, abs(current - targetHeight) < 5 {
@@ -586,8 +667,12 @@ final class ARExperience: NSObject, ObservableObject {
         newSummary.distanciaEstacion = station?.distance
         newSummary.distanciaVia = track?.distance
         if let track = track, let ground = userGround {
-            newSummary.profundidad = ground - track.point.cotaCarril
+            // Bajo tus pies: cuenta también lo que estés sobre el terreno.
+            newSummary.profundidad = ground + targetLift - track.point.cotaCarril
         }
+        // En metros enteros, para no redibujar el panel con cada lectura.
+        newSummary.altura = targetLift.rounded()
+        newSummary.alturaManual = manualLift != nil
         newSummary.profundidadEstimada = station?.estacion.origenCota == .estimado
         if newSummary != summary {
             summary = newSummary
@@ -643,6 +728,12 @@ final class ARExperience: NSObject, ObservableObject {
         state.manual = !manual.isIdentity
         if let camera = cameraTransform {
             state.cameraHeight = Double(camera.columns.3.y - controller.groundHeight(camera: camera, dt: 0))
+        }
+        state.lift = targetLift
+        state.liftManual = manualLift != nil
+        if let fix = location?.location {
+            state.altitude = fix.altitude
+            state.altitudeAccuracy = fix.verticalAccuracy
         }
         state.latitude = userGeo?.latitude
         state.longitude = userGeo?.longitude

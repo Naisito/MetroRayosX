@@ -63,6 +63,12 @@ struct DebugHUD: View {
         flags.append(String(format: "móvil a %.1f m del suelo", state.cameraHeight))
         result.append(flags.joined(separator: " · "))
 
+        var height = String(format: "Sobre el terreno: %.1f m (%@)", state.lift, state.liftManual ? "a mano" : "GPS")
+        if let altitude = state.altitude, let accuracy = state.altitudeAccuracy {
+            height += String(format: " · altitud %.1f ±%.1f m", altitude, accuracy)
+        }
+        result.append(height)
+
         if let latitude = state.latitude, let longitude = state.longitude {
             result.append(String(format: "Posición ajustada: %.6f, %.6f", latitude, longitude))
         }

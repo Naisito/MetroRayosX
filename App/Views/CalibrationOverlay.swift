@@ -1,8 +1,8 @@
 import MetroCore
 import SwiftUI
 
-/// Panel de calibración: anclaje en una boca, reinicio y recordatorio de los
-/// gestos. Los gestos (un dedo mueve, dos dedos giran) funcionan siempre
+/// Panel de calibración: anclaje en una boca, altura sobre el terreno,
+/// reinicio y recordatorio de los gestos. Los gestos (un dedo mueve, dos dedos giran) funcionan siempre
 /// sobre la imagen, con el panel abierto o cerrado.
 struct CalibrationOverlay: View {
     @ObservedObject var experience: ARExperience
@@ -58,6 +58,8 @@ struct CalibrationOverlay: View {
                 }
             }
 
+            heightRow
+
             HStack(spacing: 14) {
                 Label("Un dedo mueve", systemImage: "hand.draw")
                 Label("Dos dedos giran", systemImage: "arrow.triangle.2.circlepath")
@@ -76,6 +78,57 @@ struct CalibrationOverlay: View {
         }
         .padding(12)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    /// En un puente o una pasarela no pisas el terreno: aquí se dice a
+    /// cuántos metros estás por encima, si el GPS no lo acierta solo.
+    private var heightRow: some View {
+        let summary = experience.summary
+        return HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text("Altura sobre el terreno")
+                    .font(.subheadline.weight(.semibold))
+                Text(heightText(summary))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer()
+            if summary.alturaManual {
+                Button("Auto") {
+                    experience.resetLift()
+                }
+                .font(.caption)
+                .buttonStyle(.bordered)
+            }
+            Button {
+                experience.adjustLift(by: -1)
+            } label: {
+                Image(systemName: "minus")
+                    .frame(width: 22, height: 22)
+            }
+            .buttonStyle(.bordered)
+            Text(String(format: "%.0f m", summary.altura))
+                .font(.callout.monospacedDigit())
+                .frame(minWidth: 40)
+            Button {
+                experience.adjustLift(by: 1)
+            } label: {
+                Image(systemName: "plus")
+                    .frame(width: 22, height: 22)
+            }
+            .buttonStyle(.bordered)
+        }
+    }
+
+    private func heightText(_ summary: ARSummary) -> String {
+        if summary.alturaManual {
+            return "Puesta a mano"
+        }
+        if summary.altura >= 1 {
+            return "Según la altitud del GPS"
+        }
+        return "Súbela si estás en un puente o una pasarela"
     }
 
     private func title(for boca: BocaCercana) -> String {
